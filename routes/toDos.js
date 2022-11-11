@@ -85,12 +85,6 @@ router.get('/all', async function(req, res, next) {
     }
 
 
-
-
-    // res.json({
-    //     success:true, 
-    //     todos: mockTodos
-    // })
 });
 
 /* create to do */
@@ -122,5 +116,62 @@ router.post('/create-one', async function(req, res, next) {
         todo: toDoData
     })
 });
+
+router.put('/update-one/:id', async function(req, res,next){
+
+    const toDoToUpdate = req.params.id
+    const isComplete = req.body.isComplete
+
+    if (req.body.isComplete === undefined) {
+        res.json({
+            success: false,
+            message: "is complete must be defined"
+        })
+    }
+
+    if (req.body.isComplete === true) {
+        const toDo = await db().collection('todos').findOneAndUpdate({
+            id: toDoToUpdate
+        },
+        {
+            $set: {
+                isComplete: false,
+                completedDate: null
+            }
+        }
+        
+        )
+    } else {
+        
+        const toDo = await db().collection('todos').findOneAndUpdate({
+            id: toDoToUpdate  
+        },
+        {$set: {
+            isComplete: true,
+            completedDate: new Date()
+        }
+    }
+    )
+}
+
+    res.json({
+        success: true
+    })
+})
+
+
+router.delete('/delete-one/:id', async function(req, res, next){
+
+    const toDoToDelete = req.params.id
+
+    const toDo = await db().collection('todos').deleteOne({
+        id: toDoToDelete
+    })
+
+    res.json({
+        success: true
+    })
+
+})
 
 module.exports = router;
