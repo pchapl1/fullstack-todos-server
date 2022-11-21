@@ -2,7 +2,7 @@ var express = require('express');
 const { uuid } = require('uuidv4');
 var router = express.Router();
 
-const {db} = require("../../mongo")
+const {db} = require("../mongo")
 
 // const mockTodos = [{
 //     id: "4387f4d8-aeac-4559-9f1b-3c5d537c955c",
@@ -90,7 +90,6 @@ router.get('/all', async function(req, res, next) {
 /* create to do */
 router.post('/create-one', async function(req, res, next) {
 
-    console.log('in create one ======================================')
     const title = req.body.title
     const description = req.body.description
     const priority = req.body.priority
